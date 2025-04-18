@@ -394,354 +394,19 @@ dev.off()
 
 ```{r}
 # loading the dataset - dataset includes information on 2025 NESCAC Women's Lacrosse players 
-nescac_list <- read.csv("NESCAC_Mens_Lacrosse.csv")
-nescac_list
+nescac_list2 <- read.csv("NESCAC_Mens_Lacrosse.csv")
+
+# Match full state names to abbreviations
+nescac_list2$Home.State <- state.abb[match(nescac_list2$Home.State, state.name)]
+
+nescac_list2$School.State <- state.abb[match(nescac_list2$School.State, state.name)]
+
+nescac_list2
 ```
 
 ```{r}
 #colnames(nescac_list)
 #nescac_list <- as.data.frame(nescac_list)
-frequent_combinations <- nescac_list %>%
-  group_by(Home.State, School.State) %>%
-  tally() %>%
-  arrange(desc(n))
-
-# View the most frequent combination
-head(frequent_combinations)
-```
-
-
-```{r}
-# creating lists of players based on their schools 
-
-# Amherst List
-amherst_list <- subset(nescac_list, School == "Amherst")
-amherst_list
-
-# Bates List
-bates_list <- subset(nescac_list, School == "Bates")
-bates_list
-
-# Bowdoin List
-bowdoin_list <- subset(nescac_list, School == "Bowdoin")
-bowdoin_list
-
-# Colby List
-colby_list <- subset(nescac_list, School == "Colby")
-colby_list
-
-# Conn List
-conn_list <- subset(nescac_list, School == "Connecticut")
-conn_list
-
-# Hamilton List
-hamilton_list <- subset(nescac_list, School == "Hamilton")
-hamilton_list
-
-# Middlebury List
-middlebury_list <- subset(nescac_list, School == "Middlebury")
-middlebury_list
-
-# Trinity List
-trinity_list <- subset(nescac_list, School == "Trinity")
-trinity_list
-
-# Tufts List
-tufts_list <- subset(nescac_list, School == "Tufts")
-tufts_list
-
-# Wesleyan List
-wesleyan_list <- subset(nescac_list, School == "Wesleyan")
-wesleyan_list
-
-# Williams List
-williams_list <- subset(nescac_list, School == "Williams")
-williams_list
-```
-
-
-```{r}
-# makes a table of frequencies of home states and school states of the original, whole list of NESCAC players
-nescac_list <- table(nescac_list$Home.State, nescac_list$School.State)
-nescac_list
-```
-
-```{r}
-# creating a visualization showing the frequencies of home state to school state 
-png("nescac_Mens_color.png", width=8000, height=1000, res=250)
-cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be') 
-plotweb(nescac_list, method='cca', labsize=1, x.lim=c(0,3.45), y.lim=c(-0.2,2.2), text.rot=90, col.interaction=cols1, bor.col.interaction=cols1)
-dev.off()
-```
-
-``` {r}
-# plotting a network visualization of the network
-cols2<-c('white', 'lightgreen', 'darkgreen')
-#you can also try other palettes
-#cols2 <- brewer.pal(3, "Reds")
-visweb(nescac_list, type='nested', labsize=.3, plotsize=50, square="defined", def.col=cols2)
-```
-
-
-```{r}
-# working on Amherst - making a bar graph of frequencies of home state 
-amherst_home_state_freq <- table(amherst_list$Home.State)
-#amherst_home_state_freq
-max_y <- max(amherst_home_state_freq)
-
-png("amherst_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#3f1f69', '#b7a5d3'), length.out = length(amherst_home_state_freq))
-barplot(
-  height = amherst_home_state_freq,          
-  names.arg = names(amherst_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Amherst Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 14) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Bates - making a bar graph of frequencies of home state 
-bates_home_state_freq <- table(bates_list$Home.State)
-#bates_home_state_freq
-max_y <- max(bates_home_state_freq)
-
-png("bates_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#881124', '#B2B3B2'), length.out = length(bates_home_state_freq))
-barplot(
-  height = bates_home_state_freq,          
-  names.arg = names(bates_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Bates Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 12) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Bowdoin - making a bar graph of frequencies of home state 
-bowdoin_home_state_freq <- table(bowdoin_list$Home.State)
-#bowdoin_home_state_freq
-max_y <- max(bowdoin_home_state_freq)
-
-png("bowdoin_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#000000', '#FFFFFF'), length.out = length(bowdoin_home_state_freq))
-barplot(
-  height = bowdoin_home_state_freq,          
-  names.arg = names(bowdoin_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Bowdoin Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 15) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Colby - making a bar graph of frequencies of home state 
-colby_home_state_freq <- table(colby_list$Home.State)
-#colby_home_state_freq
-max_y <- max(colby_home_state_freq)
-
-png("colby_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#002169', '#9EA9B0'), length.out = length(colby_home_state_freq))
-barplot(
-  height = colby_home_state_freq,          
-  names.arg = names(colby_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Colby Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 7) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Conn - making a bar graph of frequencies of home state 
-conn_home_state_freq <- table(conn_list$Home.State)
-#conn_home_state_freq
-max_y <- max(conn_home_state_freq)
-
-png("conn_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#1F3A60', '#8a8d8f'), length.out = length(conn_home_state_freq))
-barplot(
-  height = conn_home_state_freq,          
-  names.arg = names(conn_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Connecticut College Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 8) 
-)  
-dev.off()
-```
-
-
-
-```{r}
-# working on Hamilton - making a bar graph of frequencies of home state 
-hamilton_home_state_freq <- table(hamilton_list$Home.State)
-#hamilton_home_state_freq
-max_y <- max(hamilton_home_state_freq)
-
-png("hamilton_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#d6ba8b', '#002f86'), length.out = length(hamilton_home_state_freq))
-barplot(
-  height = hamilton_home_state_freq,          
-  names.arg = names(hamilton_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Hamilton Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 9) 
-)  
-dev.off()
-```
-
-
-```{r}
-# working on Middlebury - making a bar graph of frequencies of home state 
-middlebury_home_state_freq <- table(middlebury_list$Home.State)
-#middlebury_home_state_freq
-max_y <- max(middlebury_home_state_freq)
-
-png("middlebury_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#003882', '#D6D2C4'), length.out = length(middlebury_home_state_freq))
-barplot(
-  height = middlebury_home_state_freq,          
-  names.arg = names(middlebury_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Middlebury Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 9) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Trinity - making a bar graph of frequencies of home state 
-trinity_home_state_freq <- table(trinity_list$Home.State)
-#trinity_home_state_freq
-max_y <- max(trinity_home_state_freq)
-
-png("trinity_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#004179', '#F3C404'), length.out = length(trinity_home_state_freq))
-barplot(
-  height = trinity_home_state_freq,          
-  names.arg = names(trinity_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Trinity Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 11) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Tufts - making a bar graph of frequencies of home state 
-tufts_home_state_freq <- table(tufts_list$Home.State)
-#tufts_home_state_freq
-max_y <- max(tufts_home_state_freq)
-
-png("tufts_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#418fde','#5E4B3C'), length.out = length(tufts_home_state_freq))
-barplot(
-  height = tufts_home_state_freq,          
-  names.arg = names(tufts_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Tufts Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 5) 
-)  
-dev.off()
-# maybe fix 
-```
-
-```{r}
-# working on Wesleyan - making a bar graph of frequencies of home state 
-wesleyan_home_state_freq <- table(wesleyan_list$Home.State)
-#wesleyan_home_state_freq
-max_y <- max(wesleyan_home_state_freq)
-
-png("wesleyan_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#000000', '#D72121'), length.out = length(wesleyan_home_state_freq))
-barplot(
-  height = wesleyan_home_state_freq,          
-  names.arg = names(wesleyan_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Wesleyan Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 9) 
-)  
-dev.off()
-```
-
-```{r}
-# working on Williams - making a bar graph of frequencies of home state 
-williams_home_state_freq <- table(williams_list$Home.State)
-#williams_home_state_freq
-max_y <- max(williams_home_state_freq)
-
-png("williams_lacrosse_Mens_home_states.png", width = 800, height = 600)
-bar_colors <- rep(c('#500082', '#FFBE0A'), length.out = length(williams_home_state_freq))
-barplot(
-  height = williams_home_state_freq,          
-  names.arg = names(williams_list$Home.State),            
-  las = 1,                                    
-  main = "Frequencies of the Williams Women's Lacrosse Team Home States",         
-  xlab = "Home State",                             
-  ylab = "Number of Players",                                                      
-  cex.names = 1, 
-  col = bar_colors,
-  ylim = c(0, max_y + 12) 
-)  
-dev.off()
-
-```
-
-##NOW FOR TOTAL PLAYERS
-
-
-```{r}
-# loading the dataset - dataset includes information on 2025 NESCAC Women's Lacrosse players 
-nescac_list2 <- read.csv("NESCAC_Total_Lacrosse.csv")
-nescac_list2
-```
-
-```{r}
-#colnames(nescac_list2)
-#nescac_list <- as.data.frame(nescac_list2)
 frequent_combinations <- nescac_list2 %>%
   group_by(Home.State, School.State) %>%
   tally() %>%
@@ -809,7 +474,7 @@ nescac_list2
 
 ```{r}
 # creating a visualization showing the frequencies of home state to school state 
-png("nescac_total_color.png", width=8000, height=1000, res=250)
+png("nescac_Mens_color.png", width=8000, height=1000, res=250)
 cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be') 
 plotweb(nescac_list2, method='cca', labsize=1, x.lim=c(0,3.45), y.lim=c(-0.2,2.2), text.rot=90, col.interaction=cols1, bor.col.interaction=cols1)
 dev.off()
@@ -826,7 +491,348 @@ visweb(nescac_list2, type='nested', labsize=.3, plotsize=50, square="defined", d
 
 ```{r}
 # working on Amherst - making a bar graph of frequencies of home state 
-amherst_home_state_freq2 <- table(amherst_list2$Home.State)
+amherst_home_state_freq <- table(amherst_list2$Home.State)
+#amherst_home_state_freq
+max_y <- max(amherst_home_state_freq)
+
+png("amherst_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#3f1f69', '#b7a5d3'), length.out = length(amherst_home_state_freq))
+barplot(
+  height = amherst_home_state_freq,          
+  names.arg = names(amherst_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Amherst Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 14) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Bates - making a bar graph of frequencies of home state 
+bates_home_state_freq <- table(bates_list2$Home.State)
+#bates_home_state_freq
+max_y <- max(bates_home_state_freq)
+
+png("bates_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#881124', '#B2B3B2'), length.out = length(bates_home_state_freq))
+barplot(
+  height = bates_home_state_freq,          
+  names.arg = names(bates_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Bates Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 12) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Bowdoin - making a bar graph of frequencies of home state 
+bowdoin_home_state_freq <- table(bowdoin_list2$Home.State)
+#bowdoin_home_state_freq
+max_y <- max(bowdoin_home_state_freq)
+
+png("bowdoin_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#000000', '#FFFFFF'), length.out = length(bowdoin_home_state_freq))
+barplot(
+  height = bowdoin_home_state_freq,          
+  names.arg = names(bowdoin_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Bowdoin Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 15) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Colby - making a bar graph of frequencies of home state 
+colby_home_state_freq <- table(colby_list2$Home.State)
+#colby_home_state_freq
+max_y <- max(colby_home_state_freq)
+
+png("colby_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#002169', '#9EA9B0'), length.out = length(colby_home_state_freq))
+barplot(
+  height = colby_home_state_freq,          
+  names.arg = names(colby_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Colby Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 7) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Conn - making a bar graph of frequencies of home state 
+conn_home_state_freq <- table(conn_list2$Home.State)
+#conn_home_state_freq
+max_y <- max(conn_home_state_freq)
+
+png("conn_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#1F3A60', '#8a8d8f'), length.out = length(conn_home_state_freq))
+barplot(
+  height = conn_home_state_freq,          
+  names.arg = names(conn_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Connecticut College Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 8) 
+)  
+dev.off()
+```
+
+
+
+```{r}
+# working on Hamilton - making a bar graph of frequencies of home state 
+hamilton_home_state_freq <- table(hamilton_list2$Home.State)
+#hamilton_home_state_freq
+max_y <- max(hamilton_home_state_freq)
+
+png("hamilton_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#d6ba8b', '#002f86'), length.out = length(hamilton_home_state_freq))
+barplot(
+  height = hamilton_home_state_freq,          
+  names.arg = names(hamilton_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Hamilton Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 9) 
+)  
+dev.off()
+```
+
+
+```{r}
+# working on Middlebury - making a bar graph of frequencies of home state 
+middlebury_home_state_freq <- table(middlebury_list2$Home.State)
+#middlebury_home_state_freq
+max_y <- max(middlebury_home_state_freq)
+
+png("middlebury_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#003882', '#D6D2C4'), length.out = length(middlebury_home_state_freq))
+barplot(
+  height = middlebury_home_state_freq,          
+  names.arg = names(middlebury_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Middlebury Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 9) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Trinity - making a bar graph of frequencies of home state 
+trinity_home_state_freq <- table(trinity_list2$Home.State)
+#trinity_home_state_freq
+max_y <- max(trinity_home_state_freq)
+
+png("trinity_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#004179', '#F3C404'), length.out = length(trinity_home_state_freq))
+barplot(
+  height = trinity_home_state_freq,          
+  names.arg = names(trinity_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Trinity Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 11) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Tufts - making a bar graph of frequencies of home state 
+tufts_home_state_freq <- table(tufts_list2$Home.State)
+#tufts_home_state_freq
+max_y <- max(tufts_home_state_freq)
+
+png("tufts_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#418fde','#5E4B3C'), length.out = length(tufts_home_state_freq))
+barplot(
+  height = tufts_home_state_freq,          
+  names.arg = names(tufts_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Tufts Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 5) 
+)  
+dev.off()
+# maybe fix 
+```
+
+```{r}
+# working on Wesleyan - making a bar graph of frequencies of home state 
+wesleyan_home_state_freq <- table(wesleyan_list2$Home.State)
+#wesleyan_home_state_freq
+max_y <- max(wesleyan_home_state_freq)
+
+png("wesleyan_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#000000', '#D72121'), length.out = length(wesleyan_home_state_freq))
+barplot(
+  height = wesleyan_home_state_freq,          
+  names.arg = names(wesleyan_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Wesleyan Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 9) 
+)  
+dev.off()
+```
+
+```{r}
+# working on Williams - making a bar graph of frequencies of home state 
+williams_home_state_freq <- table(williams_list2$Home.State)
+#williams_home_state_freq
+max_y <- max(williams_home_state_freq)
+
+png("williams_lacrosse_Mens_home_states.png", width = 800, height = 600)
+bar_colors <- rep(c('#500082', '#FFBE0A'), length.out = length(williams_home_state_freq))
+barplot(
+  height = williams_home_state_freq,          
+  names.arg = names(williams_list2$Home.State),            
+  las = 1,                                    
+  main = "Frequencies of the Williams Women's Lacrosse Team Home States",         
+  xlab = "Home State",                             
+  ylab = "Number of Players",                                                      
+  cex.names = 1, 
+  col = bar_colors,
+  ylim = c(0, max_y + 12) 
+)  
+dev.off()
+
+```
+
+##NOW FOR TOTAL PLAYERS
+
+
+```{r}
+# loading the dataset - dataset includes information on 2025 NESCAC Women's Lacrosse players 
+nescac_list3 <- read.csv("NESCAC_Total_Lacrosse.csv")
+nescac_list3
+```
+
+```{r}
+#colnames(nescac_list3)
+#nescac_list <- as.data.frame(nescac_list3)
+frequent_combinations <- nescac_list3 %>%
+  group_by(Home.State, School.State) %>%
+  tally() %>%
+  arrange(desc(n))
+
+# View the most frequent combination
+head(frequent_combinations)
+```
+
+
+```{r}
+# creating lists of players based on their schools 
+
+# Amherst List
+amherst_list3 <- subset(nescac_list3, School == "Amherst")
+amherst_list3
+
+# Bates List
+bates_list3 <- subset(nescac_list3, School == "Bates")
+bates_list3
+
+# Bowdoin List
+bowdoin_list3 <- subset(nescac_list3, School == "Bowdoin")
+bowdoin_list3
+
+# Colby List
+colby_list3 <- subset(nescac_list3, School == "Colby")
+colby_list3
+
+# Conn List
+conn_list3 <- subset(nescac_list3, School == "Connecticut")
+conn_list3
+
+# Hamilton List
+hamilton_list3 <- subset(nescac_list3, School == "Hamilton")
+hamilton_list3
+
+# Middlebury List
+middlebury_list3 <- subset(nescac_list3, School == "Middlebury")
+middlebury_list3
+
+# Trinity List
+trinity_list3 <- subset(nescac_list3, School == "Trinity")
+trinity_list3
+
+# Tufts List
+tufts_list3 <- subset(nescac_list3, School == "Tufts")
+tufts_list3
+
+# Wesleyan List
+wesleyan_list3 <- subset(nescac_list3, School == "Wesleyan")
+wesleyan_list3
+
+# Williams List
+williams_list3 <- subset(nescac_list3, School == "Williams")
+williams_list3
+```
+
+
+```{r}
+# makes a table of frequencies of home states and school states of the original, whole list of NESCAC players
+nescac_list3 <- table(nescac_list3$Home.State, nescac_list3$School.State)
+nescac_list3
+```
+
+```{r}
+# creating a visualization showing the frequencies of home state to school state 
+png("nescac_total_color.png", width=8000, height=1000, res=250)
+cols1<-c('#006e82', '#8214a0', '#005ac8', '#00a0fa', '#fa78fa', '#14d2dc', '#aa0a3c', '#fa7850', '#0ab45a', '#f0f032', '#a0fa82', '#fae6be') 
+plotweb(nescac_list3, method='cca', labsize=1, x.lim=c(0,3.45), y.lim=c(-0.2,2.2), text.rot=90, col.interaction=cols1, bor.col.interaction=cols1)
+dev.off()
+```
+
+``` {r}
+# plotting a network visualization of the network
+cols2<-c('white', 'lightgreen', 'darkgreen')
+#you can also try other palettes
+#cols2 <- brewer.pal(3, "Reds")
+visweb(nescac_list3, type='nested', labsize=.3, plotsize=50, square="defined", def.col=cols2)
+```
+
+
+```{r}
+# working on Amherst - making a bar graph of frequencies of home state 
+amherst_home_state_freq2 <- table(amherst_list3$Home.State)
 #amherst_home_state_freq2
 max_y <- max(amherst_home_state_freq2)
 
@@ -834,7 +840,7 @@ png("amherst_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#3f1f69', '#b7a5d3'), length.out = length(amherst_home_state_freq2))
 barplot(
   height = amherst_home_state_freq2,          
-  names.arg = names(amherst_list2$Home.State),            
+  names.arg = names(amherst_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Amherst Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -848,7 +854,7 @@ dev.off()
 
 ```{r}
 # working on Bates - making a bar graph of frequencies of home state 
-bates_home_state_freq2 <- table(bates_list2$Home.State)
+bates_home_state_freq2 <- table(bates_list3$Home.State)
 #bates_home_state_freq2
 max_y <- max(bates_home_state_freq2)
 
@@ -856,7 +862,7 @@ png("bates_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#881124', '#B2B3B2'), length.out = length(bates_home_state_freq2))
 barplot(
   height = bates_home_state_freq2,          
-  names.arg = names(bates_list2$Home.State),            
+  names.arg = names(bates_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Bates Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -870,7 +876,7 @@ dev.off()
 
 ```{r}
 # working on Bowdoin - making a bar graph of frequencies of home state 
-bowdoin_home_state_freq2 <- table(bowdoin_list2$Home.State)
+bowdoin_home_state_freq2 <- table(bowdoin_list3$Home.State)
 #bowdoin_home_state_freq2
 max_y <- max(bowdoin_home_state_freq2)
 
@@ -878,7 +884,7 @@ png("bowdoin_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#000000', '#FFFFFF'), length.out = length(bowdoin_home_state_freq2))
 barplot(
   height = bowdoin_home_state_freq2,          
-  names.arg = names(bowdoin_list2$Home.State),            
+  names.arg = names(bowdoin_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Bowdoin Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -892,7 +898,7 @@ dev.off()
 
 ```{r}
 # working on Colby - making a bar graph of frequencies of home state 
-colby_home_state_freq2 <- table(colby_list2$Home.State)
+colby_home_state_freq2 <- table(colby_list3$Home.State)
 #colby_home_state_freq2
 max_y <- max(colby_home_state_freq2)
 
@@ -900,7 +906,7 @@ png("colby_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#002169', '#9EA9B0'), length.out = length(colby_home_state_freq2))
 barplot(
   height = colby_home_state_freq2,          
-  names.arg = names(colby_list2$Home.State),            
+  names.arg = names(colby_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Colby Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -914,7 +920,7 @@ dev.off()
 
 ```{r}
 # working on Conn - making a bar graph of frequencies of home state 
-conn_home_state_freq2 <- table(conn_list2$Home.State)
+conn_home_state_freq2 <- table(conn_list3$Home.State)
 conn_home_state_freq2
 max_y <- max(conn_home_state_freq2)
 
@@ -922,7 +928,7 @@ png("conn_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#1F3A60', '#8a8d8f'), length.out = length(conn_home_state_freq2))
 barplot(
   height = conn_home_state_freq2,          
-  names.arg = names(conn_list2$Home.State),            
+  names.arg = names(conn_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Connecticut College Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -936,7 +942,7 @@ dev.off()
 
 ```{r}
 # working on Hamilton - making a bar graph of frequencies of home state 
-hamilton_home_state_freq2 <- table(hamilton_list2$Home.State)
+hamilton_home_state_freq2 <- table(hamilton_list3$Home.State)
 #hamilton_home_state_freq2
 max_y <- max(hamilton_home_state_freq2)
 
@@ -944,7 +950,7 @@ png("hamilton_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#d6ba8b', '#002f86'), length.out = length(hamilton_home_state_freq2))
 barplot(
   height = hamilton_home_state_freq2,          
-  names.arg = names(hamilton_list2$Home.State),            
+  names.arg = names(hamilton_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Hamilton Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -959,7 +965,7 @@ dev.off()
 
 ```{r}
 # working on Middlebury - making a bar graph of frequencies of home state 
-middlebury_home_state_freq2 <- table(middlebury_list2$Home.State)
+middlebury_home_state_freq2 <- table(middlebury_list3$Home.State)
 #middlebury_home_state_freq2
 max_y <- max(middlebury_home_state_freq2)
 
@@ -967,7 +973,7 @@ png("middlebury_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#003882', '#D6D2C4'), length.out = length(middlebury_home_state_freq2))
 barplot(
   height = middlebury_home_state_freq2,          
-  names.arg = names(middlebury_list2$Home.State),            
+  names.arg = names(middlebury_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Middlebury Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -981,7 +987,7 @@ dev.off()
 
 ```{r}
 # working on Trinity - making a bar graph of frequencies of home state 
-trinity_home_state_freq2 <- table(trinity_list2$Home.State)
+trinity_home_state_freq2 <- table(trinity_list3$Home.State)
 #trinity_home_state_freq2
 max_y <- max(trinity_home_state_freq2)
 
@@ -989,7 +995,7 @@ png("trinity_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#004179', '#F3C404'), length.out = length(trinity_home_state_freq2))
 barplot(
   height = trinity_home_state_freq2,          
-  names.arg = names(trinity_list2$Home.State),            
+  names.arg = names(trinity_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Trinity Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -1003,7 +1009,7 @@ dev.off()
 
 ```{r}
 # working on Tufts - making a bar graph of frequencies of home state 
-tufts_home_state_freq2 <- table(tufts_list2$Home.State)
+tufts_home_state_freq2 <- table(tufts_list3$Home.State)
 #tufts_home_state_freq2
 max_y <- max(tufts_home_state_freq2)
 
@@ -1011,7 +1017,7 @@ png("tufts_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#418fde','#5E4B3C'), length.out = length(tufts_home_state_freq2))
 barplot(
   height = tufts_home_state_freq2,          
-  names.arg = names(tufts_list2$Home.State),            
+  names.arg = names(tufts_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Tufts Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -1025,7 +1031,7 @@ dev.off()
 
 ```{r}
 # working on Wesleyan - making a bar graph of frequencies of home state 
-wesleyan_home_state_freq2 <- table(wesleyan_list2$Home.State)
+wesleyan_home_state_freq2 <- table(wesleyan_list3$Home.State)
 #wesleyan_home_state_freq2
 max_y <- max(wesleyan_home_state_freq2)
 
@@ -1033,7 +1039,7 @@ png("wesleyan_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#000000', '#D72121'), length.out = length(wesleyan_home_state_freq2))
 barplot(
   height = wesleyan_home_state_freq2,          
-  names.arg = names(wesleyan_list2$Home.State),            
+  names.arg = names(wesleyan_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Wesleyan Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -1047,7 +1053,7 @@ dev.off()
 
 ```{r}
 # working on Williams - making a bar graph of frequencies of home state 
-williams_home_state_freq2 <- table(williams_list2$Home.State)
+williams_home_state_freq2 <- table(williams_list3$Home.State)
 #williams_home_state_freq2
 max_y <- max(williams_home_state_freq2)
 
@@ -1055,7 +1061,7 @@ png("williams_lacrosse_total_home_states.png", width = 800, height = 600)
 bar_colors <- rep(c('#500082', '#FFBE0A'), length.out = length(williams_home_state_freq2))
 barplot(
   height = williams_home_state_freq2,          
-  names.arg = names(williams_list2$Home.State),            
+  names.arg = names(williams_list3$Home.State),            
   las = 1,                                    
   main = "Frequencies of the All Williams Lacrosse Team Home States",         
   xlab = "Home State",                             
@@ -1073,28 +1079,45 @@ dev.off()
 womens_data <- read.csv("NESCAC_Womens_Lacrosse.csv")
 mens_data <- read.csv("NESCAC_Mens_Lacrosse.csv")
 
-# Add an gender column for each dataset
-womens_data$Gender <- "Women"
-mens_data$Gender <- "Men"
+# Match full state names to abbreviations
+mens_data$Home.State <- state.abb[match(mens_data$Home.State, state.name)]
 
-# Combine both into one dataset
-combined_data <- rbind(womens_data[, c("Home.State", "School.State", "Gender")],
-                       mens_data[, c("Home.State", "School.State", "Gender")])
+mens_data$School.State <- state.abb[match(mens_data$School.State, state.name)]
 
-# Compare homestates
-home_table <- table(combined_data$Home.State, combined_data$Gender)
-
-# Run Chi-squared test
-home_chi_test <- chisq.test(home_table)
-home_chi_test
-
+womens_data
+mens_data
 ```
 
 
 ```{r}
-#install.packages("vcd")
-#library(vcd)
-#assocstats(home_table)  # includes Cramér's V
+# Add a gender column for each dataset
+womens_data$Gender <- "Women"
+mens_data$Gender <- "Men"
+```
+
+
+```{r}
+# Combine both into one dataset (only necessary columns)
+combined_data <- rbind(womens_data[, c("School","Home.State", "School.State", "Gender")], mens_data[, c("School","Home.State", "School.State", "Gender")])
+```
+
+
+```{r}
+# Define states of interest
+included_states <- c("ME", "NH", "VT", "MA", "RI", "CT", "NY", "NJ", "CA")
+
+# Filter combined data to only include players from the specified states
+filtered_data <- subset(combined_data, Home.State %in% included_states)
+```
+
+
+```{r}
+# Create contingency table for home state and gender
+home_table <- table(filtered_data$Home.State, filtered_data$Gender)
+
+# Run Chi-squared test
+home_chi_test <- chisq.test(home_table)
+home_chi_test
 
 ```
 
