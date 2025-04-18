@@ -1,6 +1,6 @@
 ---
-title: "Untitled"
-author: "Emily Mueller"
+title: "NESCAC Lacrosse Network"
+author: "Emily Mueller and Johnny Nunez"
 date: "2025-04-02"
 output: html_document
 ---
